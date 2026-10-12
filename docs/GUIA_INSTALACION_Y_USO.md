@@ -21,11 +21,41 @@ La cámara, la portería y la iluminación no deben moverse después de calibrar
 Instala los siguientes programas:
 
 1. **[Python 3.14 de 64 bits](https://www.python.org/downloads/windows/)**.
-   El proyecto fue validado con Python 3.14.7.
-2. **[Node.js 24 LTS](https://nodejs.org/en/download)**, que también instala
-   `npm`.
-3. **[pnpm 11.25.0](https://pnpm.io/installation/)**, utilizando `npm` después
-   de instalar Node.js.
+   En la página de Python, selecciona **Latest Python install manager**. No
+   instales Python 3.15 para este proyecto. Después de instalar el administrador,
+   abre PowerShell y ejecuta:
+
+   ```powershell
+   py install 3.14
+   py -3.14 --version
+   ```
+
+   El último comando debe mostrar Python 3.14.x. El proyecto fue validado con
+   Python 3.14.7.
+
+2. **[Node.js 24 LTS](https://nodejs.org/en/download)**. En la página de Node.js,
+   selecciona exactamente:
+
+   - versión `v24 LTS`;
+   - sistema `Windows`;
+   - arquitectura `x64`;
+   - descarga **Windows Installer (.msi)**.
+
+   No selecciones Docker ni el archivo **Standalone Binary (.zip)**. El
+   instalador MSI también instala `npm`.
+
+3. **[pnpm 11.25.0 o posterior](https://pnpm.io/installation/)**. No descargues otro
+   instalador desde la página de pnpm. Después de instalar Node.js, abre
+   PowerShell y ejecuta:
+
+   ```powershell
+   npm install --global pnpm@11.25.0
+   pnpm --version
+   ```
+
+   El último comando debe mostrar `11.25.0` o una versión posterior. Por ejemplo,
+   `12.11.2` también es compatible.
+
 4. Un navegador moderno, preferiblemente Google Chrome o Microsoft Edge.
 5. Visual Studio Code es opcional, pero facilita la apertura de terminales.
 
@@ -37,21 +67,15 @@ o PowerShell para que Windows actualice las rutas de los comandos.
 Abre PowerShell y ejecuta:
 
 ```powershell
-py --version
+py -3.14 --version
 node --version
 npm --version
-```
-
-Los tres comandos deben mostrar una versión y no un mensaje de error.
-
-Instala la versión de pnpm usada para validar el proyecto:
-
-```powershell
-npm install --global pnpm@11.25.0
 pnpm --version
 ```
 
-El último comando debe mostrar `11.25.0`.
+Los cuatro comandos deben mostrar una versión y no un mensaje de error. Si
+alguno no se reconoce, cierra y vuelve a abrir Visual Studio Code antes de
+intentarlo nuevamente.
 
 ## 4. Copiar el proyecto
 
@@ -111,6 +135,44 @@ Windows asigna un índice numérico a cada cámara. En este proyecto normalmente
 usa `--camera 1`. Si no abre, prueba `--camera 0`.
 
 ## 8. Iniciar el backend
+
+### Inicio automático recomendado
+
+La forma más sencilla es hacer doble clic en el archivo ubicado en la raíz:
+
+```text
+INICIAR_OJO_HALCON.cmd
+```
+
+Antes de iniciar, este archivo realiza automáticamente las siguientes tareas:
+
+1. Comprueba que exista toda la estructura del proyecto.
+2. Comprueba Python 3.14, Node.js 24 LTS y pnpm 11.25.0 o posterior.
+3. Crea `backend/.venv` si no existe.
+4. Reemplaza de forma segura un entorno virtual creado con otra versión de Python.
+5. Instala o restaura las librerías del backend cuando sea necesario.
+6. Instala `frontend/node_modules` cuando no exista o cambien sus dependencias.
+7. Comprueba que los puertos 8000 y 5173 estén disponibles.
+8. Abre backend y frontend en ventanas separadas de PowerShell.
+9. Espera que ambos respondan y abre el marcador en el navegador.
+
+La cámara 1 se utiliza de forma predeterminada. Para iniciar con la cámara 0,
+abre PowerShell en la raíz del proyecto y ejecuta:
+
+```powershell
+.\INICIAR_OJO_HALCON.cmd -Camera 0
+```
+
+Para comprobar instalaciones y restaurar dependencias sin abrir los servicios:
+
+```powershell
+.\INICIAR_OJO_HALCON.cmd -CheckOnly
+```
+
+Si Python, Node.js o pnpm no tienen la versión requerida, el iniciador se detiene
+y muestra exactamente qué programa o comando necesita la persona.
+
+### Inicio manual alternativo
 
 Abre la primera terminal y ejecuta:
 

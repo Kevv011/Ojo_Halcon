@@ -6,6 +6,9 @@ fases posteriores, decidir si cruzó completamente una línea de gol.
 Para preparar una computadora nueva desde cero, consulta la
 [guía de instalación y uso](docs/GUIA_INSTALACION_Y_USO.md).
 
+Después de instalar Python, Node.js y pnpm, también puedes iniciar y restaurar
+automáticamente todo el proyecto con doble clic en `INICIAR_OJO_HALCON.cmd`.
+
 ## Alcance actual: fase 5 (presentación)
 
 La aplicación permite:

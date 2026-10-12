@@ -1,6 +1,7 @@
 __pycache__/
 *.py[cod]
 .venv/
+.venv-incompatible-*/
 .pytest_cache/
 backend/config/*.local.json
 backend/data/*.jsonl
