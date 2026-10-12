@@ -1,0 +1,83 @@
+{
+  "camera": {
+    "width": 1280,
+    "height": 720,
+    "fps": 30,
+    "use_mjpg": true,
+    "buffer_size": 1
+  },
+  "ball": {
+    "hsv_lower": [
+      69,
+      74,
+      40
+    ],
+    "hsv_upper": [
+      93,
+      255,
+      255
+    ],
+    "min_area": 250,
+    "max_area": 50000,
+    "morphology_kernel": 5,
+    "min_circularity": 0.45
+  },
+  "goal_line": [
+    [
+      441,
+      359
+    ],
+    [
+      875,
+      708
+    ]
+  ],
+  "goal_side_point": [
+    712,
+    465
+  ],
+  "roi": [
+    [
+      26,
+      95
+    ],
+    [
+      1029,
+      96
+    ],
+    [
+      1054,
+      710
+    ],
+    [
+      30,
+      703
+    ]
+  ],
+  "tracking": {
+    "smoothing_alpha": 0.35,
+    "velocity_alpha": 0.3,
+    "max_lost_frames": 3,
+    "max_lost_seconds": 0.5,
+    "history_size": 24,
+    "max_jump_px": 250
+  },
+  "geometry": {
+    "line_tolerance_px": 3,
+    "post_margin_px": 0
+  },
+  "game": {
+    "activation_distance_px": 220,
+    "min_approach_speed_px_s": 12,
+    "before_memory_seconds": 2.0,
+    "goal_confirmation_seconds": 0.2,
+    "min_goal_observations": 2,
+    "no_goal_stationary_seconds": 1.0,
+    "stationary_speed_px_s": 12,
+    "analysis_timeout_seconds": 3.0,
+    "max_detection_gap_seconds": 0.5,
+    "outside_mouth_seconds": 0.35,
+    "result_display_seconds": 4.0,
+    "rearm_absence_seconds": 0.8
+  }
+}

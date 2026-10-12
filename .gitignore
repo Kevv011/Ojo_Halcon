@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+backend/config/*.local.json
+backend/data/*.jsonl
+frontend/node_modules/
+frontend/dist/
