@@ -243,8 +243,18 @@ $savedRequirementsHash = if (Test-Path -LiteralPath $backendMarker) {
     ""
 }
 
-& $venvPython -c "import cv2, numpy, fastapi, uvicorn" 2>$null
-$backendImportsReady = $LASTEXITCODE -eq 0
+# La ausencia de librerias es esperable en un .venv recien creado. Windows
+# PowerShell convierte parte de stderr de programas nativos en NativeCommandError;
+# se silencia solo durante esta prueba para poder continuar con la restauracion.
+$previousErrorActionPreference = $ErrorActionPreference
+try {
+    $ErrorActionPreference = "SilentlyContinue"
+    & $venvPython -c "import cv2, numpy, fastapi, uvicorn" 2>$null
+    $backendImportsReady = $LASTEXITCODE -eq 0
+}
+finally {
+    $ErrorActionPreference = $previousErrorActionPreference
+}
 $restoreBackend = $createVenv -or -not $backendImportsReady -or $savedRequirementsHash -ne $requirementsHash
 
 if ($restoreBackend) {
