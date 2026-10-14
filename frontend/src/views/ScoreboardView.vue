@@ -1,6 +1,8 @@
 <script setup>
 import { computed, onBeforeUnmount, reactive, ref, watch } from "vue";
 
+import goalSound from "../audio/gol.wav";
+import noGoalSound from "../audio/no-gol.mp3";
 import { useOjoHalcon } from "../composables/useOjoHalcon.js";
 import cameraImage from "../images/camera.png";
 import goalImage from "../images/goal.png";
@@ -15,6 +17,11 @@ const imageFailed = ref(false);
 const gameStarted = ref(false);
 const starting = ref(false);
 const startError = ref("");
+const decisionAudios = {
+  GOAL: new Audio(goalSound),
+  "NO GOAL": new Audio(noGoalSound),
+};
+let lastSoundKey = "";
 const presentation = reactive({
   phase: "ready",
   playId: 0,
@@ -38,7 +45,29 @@ watch(
   { immediate: true },
 );
 
-onBeforeUnmount(() => controller.dispose());
+// Reproduce la reacción una sola vez cuando la decisión ya es visible.
+watch(
+  () => [presentation.phase, presentation.result, presentation.playId],
+  ([phase, result, playId]) => {
+    if (phase !== "result" || !decisionAudios[result]) return;
+
+    const soundKey = `${playId}-${result}`;
+    if (soundKey === lastSoundKey) return;
+    lastSoundKey = soundKey;
+
+    stopDecisionAudios();
+    const audio = decisionAudios[result];
+    audio.currentTime = 0;
+    audio.play().catch((error) => {
+      console.warn("El navegador no permitió reproducir el sonido de la decisión.", error);
+    });
+  },
+);
+
+onBeforeUnmount(() => {
+  controller.dispose();
+  stopDecisionAudios();
+});
 
 const calibrating = computed(
   () => systemState.value?.service_mode === "calibrating",
@@ -57,6 +86,13 @@ const resultImage = computed(() => resultSnapshotUrl(presentation.playId));
 const decisionImage = computed(() => (resultIsGoal.value ? goalImage : noGoalImage));
 const fps = computed(() => systemState.value?.camera?.fps?.toFixed(1) || "—");
 
+function stopDecisionAudios() {
+  Object.values(decisionAudios).forEach((audio) => {
+    audio.pause();
+    audio.currentTime = 0;
+  });
+}
+
 async function startGame() {
   if (!connected.value) {
     startError.value = "La cámara debe estar conectada antes de iniciar.";
@@ -65,6 +101,7 @@ async function startGame() {
 
   starting.value = true;
   startError.value = "";
+  stopDecisionAudios();
   try {
     await resetPlay();
     controller.reset();
